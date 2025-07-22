@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "dev": "nodemon --watch './**/*.ts' --exec 'tsx' server.ts",
+    "watch:sdk": "esbuild sdk/src/index.ts --bundle --format=esm --outfile=sdk/dist/index.js --watch"
+
+  },
+  "dependencies": {
+    "tsx": "^4.20.3",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.25.8",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.8.3"
+  }
+}
