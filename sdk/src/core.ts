@@ -9,6 +9,7 @@ import trackResizeEvent from "./utils/trackResizeEvent";
 import trackKeydownEvent from "./utils/trackKeydownEvent";
 import trackVisibilityEvent from "./utils/trackVisibilityEvent";
 import trackMouseMoveEvent from "./utils/trackMouseMoveEvent";
+import trackNetworkEvents from "./utils/trackNetworkEvents";
 
 let socket: WebSocket;
 let eventQueue: UXEvent[] = [];
@@ -42,4 +43,8 @@ export default function startTracking(config: Config) {
   if (capture.includes("mousemove")) {
     trackMouseMoveEvent(config, eventQueue, socket);
   }
+  if (config.capture.includes("network")) {
+  trackNetworkEvents(config, eventQueue, socket);
+}
+
 }

@@ -11,6 +11,7 @@ export type Config = {
     | "keydown"
     | "visibilitychange"
     | "mousemove"
+    | "network"
   )[];
 };
 
@@ -29,6 +30,18 @@ export type UXEvent =
     userId?: string;
     sessionId?: string;
   }
+  | {
+    type: "network";
+    timestamp: number;
+    payload: {
+      online: boolean; // true or false
+      type?: string; // 'wifi', 'cellular', etc.
+      effectiveType?: string; // '4g', '3g', etc.
+    };
+    userId?: string;
+    sessionId?: string;
+  }
+
   | {
     type: "input";
     timestamp: number;

@@ -1,3 +1,14 @@
 {
-    "name": "sdk"
+  "name": "ux-events-inspector",
+  "version": "1.0.0",
+  "description": "SDK to track UX/browser events like clicks, navigation, input, etc.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["ux", "sdk", "events", "analytics", "browser"],
+  "author": "Your Name",
+  "license": "MIT"
 }

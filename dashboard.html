@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>UX Event Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 14px; }
+    th { background-color: #f4f4f4; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    code { white-space: pre-wrap; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>UX Event Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Type</th>
+        <th>User</th>
+        <th>Session</th>
+        <th>Payload</th>
+      </tr>
+    </thead>
+    <tbody id="event-table-body"></tbody>
+  </table>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:3000");
+    const tableBody = document.getElementById("event-table-body");
+
+    socket.onopen = () => {
+      console.log("Connected to WebSocket server");
+    };
+
+
+    socket.onmessage = (event) => {
+      let events = [];
+      try {
+        events = JSON.parse(event.data);
+        if (!Array.isArray(events)) events = [events];
+      } catch (err) {
+        console.error("Invalid JSON", err);
+        return;
+      }
+
+      events.forEach(ev => {
+        const row = document.createElement("tr");
+
+        const time = new Date(ev.timestamp).toLocaleTimeString();
+        row.innerHTML = `
+          <td>${time}</td>
+          <td>${ev.type}</td>
+          <td>${ev.userId || "-"}</td>
+          <td>${ev.sessionId || "-"}</td>
+          <td><code>${JSON.stringify(ev.payload, null, 2)}</code></td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    };
+  </script>
+</body>
+</html>

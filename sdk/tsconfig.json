@@ -1,17 +1,16 @@
 {
-    "compilerOptions": {
-      "target": "ES2020",           
-      "lib": ["ES2020", "DOM"],     
-      "moduleResolution": "bundler",
-      "outDir": "dist",
-      "rootDir": "src",
-      "strict": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "moduleResolution": "bundler",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
 
-
-
-    },
-    "include": ["src"]
-  }
-  
+    "declaration": true,              
+    "declarationMap": true
+  },
+  "include": ["src"]
+}
