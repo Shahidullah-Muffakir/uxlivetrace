@@ -14,6 +14,7 @@ export type Config = {
   )[];
 };
 
+export type navigationType = "pushState" | "replaceState" | "popstate" | "hashchange" | "mutation";
 export type UXEvent =
   | {
     type: "click" | "scroll" | "mousemove";
@@ -39,11 +40,12 @@ export type UXEvent =
     userId?: string;
     sessionId?: string;
   }
-  | {
+ | {
     type: "navigation";
     timestamp: number;
     payload: {
       url: string;
+      navigationType: navigationType;
     };
     userId?: string;
     sessionId?: string;

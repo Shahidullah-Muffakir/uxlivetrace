@@ -1,4 +1,4 @@
-import { Config, UXEvent } from "../types";
+import { Config, navigationType, UXEvent } from "../types";
 import queueEvent from "./queueEvent";
 /**
  * 
@@ -17,112 +17,48 @@ Note that these methods can also be called programmatically by JavaScript code, 
  */
 
 function trackNavigationEvents(config: Config, eventQueue: UXEvent[] = [], socket: WebSocket) {
-    // Method 1: pushState and replaceState
-    const originalPushState = window.history.pushState;
-    const originalReplaceState = window.history.replaceState;
-
-    window.history.pushState = function (...args) {
-        originalPushState.apply(window.history, args);
-        const url = window.location.href;
-        const navigationEvent: UXEvent = {
-            type: 'navigation',
+    const sendEvent = (type: navigationType) => {
+        const event: UXEvent = {
+            type: "navigation",
             timestamp: Date.now(),
             payload: {
-                url,
+                url: window.location.href,
+                navigationType: type,
             },
             userId: config.userId,
             sessionId: config.sessionId,
         };
-        queueEvent(navigationEvent, eventQueue, socket);
+        queueEvent(event, eventQueue, socket);
     };
 
-    window.history.replaceState = function (...args) {
-        originalReplaceState.apply(window.history, args);
-        const url = window.location.href;
-        const navigationEvent: UXEvent = {
-            type: 'navigation',
-            timestamp: Date.now(),
-            payload: {
-                url,
-            },
-            userId: config.userId,
-            sessionId: config.sessionId,
-        };
-        queueEvent(navigationEvent, eventQueue, socket);
-
+    // Override pushState
+    const originalPushState = history.pushState;
+    history.pushState = function (...args) {
+        const result = originalPushState.apply(this, args);
+        sendEvent("pushState");
+        return result;
     };
 
-    // Method 2: popstate event
-    window.addEventListener('popstate', () => {
-        const url = window.location.href;
-        const navigationEvent: UXEvent = {
-            type: 'navigation',
-            timestamp: Date.now(),
-            payload: {
-                url,
-            },
-            userId: config.userId,
-            sessionId: config.sessionId,
-        };
-        queueEvent(navigationEvent, eventQueue, socket);
-
-    });
-
-    // Method 3: window.location
-    const originalHref = window.location.href;
-    window.addEventListener('load', () => {
-        if (window.location.href !== originalHref) {
-            const url = window.location.href;
-            const navigationEvent: UXEvent = {
-                type: 'navigation',
-                timestamp: Date.now(),
-                payload: {
-                    url,
-                },
-                userId: config.userId,
-                sessionId: config.sessionId,
-            };
-            queueEvent(navigationEvent, eventQueue, socket);
-
-        }
-    });
-
-    // Method 4: onhashchange event
-    window.onhashchange = () => {
-        const url = window.location.href;
-        const navigationEvent: UXEvent = {
-            type: 'navigation',
-            timestamp: Date.now(),
-            payload: {
-                url,
-            },
-            userId: config.userId,
-            sessionId: config.sessionId,
-        };
-        queueEvent(navigationEvent, eventQueue, socket);
-
+    // Override replaceState
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function (...args) {
+        const result = originalReplaceState.apply(this, args);
+        sendEvent("replaceState");
+        return result;
     };
 
-    // Method 5: MutationObserver
+    // Listen for back/forward
+    window.addEventListener("popstate", () => sendEvent("popstate"));
+
+    // Listen for anchor hash changes (e.g. #top)
+    window.addEventListener("hashchange", () => sendEvent("hashchange"));
+
+    // Optional: MutationObserver (not typically needed for URL tracking)
     const observer = new MutationObserver(() => {
-        const url = window.location.href;
-        const navigationEvent: UXEvent = {
-            type: 'navigation',
-            timestamp: Date.now(),
-            payload: {
-                url,
-            },
-            userId: config.userId,
-            sessionId: config.sessionId,
-        };
-        queueEvent(navigationEvent, eventQueue, socket);
-
+        sendEvent("mutation");
     });
 
-    observer.observe(document, {
-        childList: true,
-        subtree: true,
-    });
+    observer.observe(document, { childList: true, subtree: true });
 }
 
 export default trackNavigationEvents;
