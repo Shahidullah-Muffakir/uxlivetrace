@@ -1,41 +1,45 @@
 import { openSocket } from "./socket";
 import type { Config, UXEvent } from "./types";
 
+import trackClickEvent from "./utils/click";
+import trackNavigationEvents from "./utils/navigation";
+import trackScrollEvent from "./utils/trackScrollEvent";
+import trackInputEvent from "./utils/trackInputEvent";
+import trackResizeEvent from "./utils/trackResizeEvent";
+import trackKeydownEvent from "./utils/trackKeydownEvent";
+import trackVisibilityEvent from "./utils/trackVisibilityEvent";
+import trackMouseMoveEvent from "./utils/trackMouseMoveEvent";
+
 let socket: WebSocket;
 let eventQueue: UXEvent[] = [];
 
-export function startTracking(config: Config) {
+export default function startTracking(config: Config) {
   socket = openSocket(config.serverUrl);
 
-  if (config.capture.includes("click")) {
-    document.addEventListener("click", (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const event: UXEvent = {
-        type: "click",
-        timestamp: Date.now(),
-        payload: {
-          x: e.clientX,
-          y: e.clientY,
-          tagName: target.tagName,
-        },
-        userId: config.userId,
-        sessionId: config.sessionId,
-      };
-      queueEvent(event);
-    });
+  const { capture = [] } = config;
+
+  if (capture.includes("click")) {
+    trackClickEvent(config, eventQueue, socket);
   }
-
-  // TODO: Add router event support
-}
-
-function queueEvent(event: UXEvent) {
-  eventQueue.push(event);
-  if (eventQueue.length >= 5) flushEvents();
-}
-
-function flushEvents() {
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(eventQueue));
-    eventQueue = [];
+  if (capture.includes("navigation")) {
+    trackNavigationEvents(config, eventQueue, socket);
+  }
+  if (capture.includes("scroll")) {
+    trackScrollEvent(config, eventQueue, socket);
+  }
+  if (capture.includes("input")) {
+    trackInputEvent(config, eventQueue, socket);
+  }
+  if (capture.includes("resize")) {
+    trackResizeEvent(config, eventQueue, socket);
+  }
+  if (capture.includes("keydown")) {
+    trackKeydownEvent(config, eventQueue, socket);
+  }
+  if (capture.includes("visibilitychange")) {
+    trackVisibilityEvent(config, eventQueue, socket);
+  }
+  if (capture.includes("mousemove")) {
+    trackMouseMoveEvent(config, eventQueue, socket);
   }
 }

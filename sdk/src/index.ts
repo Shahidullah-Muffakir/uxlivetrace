@@ -1,7 +1,7 @@
-import { startTracking } from './core'
+import  startTracking  from './core'
 import type { Config } from './types'
 
-export function initInspector(config: Config) {
+export  function initInspector(config: Config) {
   startTracking(config)
   
 

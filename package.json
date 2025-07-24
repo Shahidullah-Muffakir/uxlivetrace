@@ -2,9 +2,9 @@
   "scripts": {
     "dev": "nodemon --watch './**/*.ts' --exec 'tsx' server.ts",
     "watch:sdk": "esbuild sdk/src/index.ts --bundle --format=esm --outfile=sdk/dist/index.js --watch"
-
   },
   "dependencies": {
+    "chalk": "^5.4.1",
     "tsx": "^4.20.3",
     "ws": "^8.18.3"
   },

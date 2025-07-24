@@ -1,16 +1,75 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <button>Click me</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UX Events Test</title>
+  <style>
+    body {
+      height: 2000px; /* So you can scroll */
+    }
+    input, textarea, select {
+      display: block;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>UX Events Test Page</h1>
 
-    <script type="module">
-      import { initInspector } from './sdk/dist/index.js'
+  <ul>
+    <li><a href="#top">Go to top</a></li>
+    <li><a href="#bottom">Go to bottom</a></li>
+    <li><a href="https://www.example.com" target="_blank">Visit example.com</a></li>
+    <li><button id="push-state-btn">Push State</button></li>
+    <li><button id="replace-state-btn">Replace State</button></li>
+  </ul>
 
-      initInspector({
-        serverUrl: 'ws://localhost:3000',
-        userId: 'test-user',
-        capture: ['click'],
-      })
-    </script>
-  </body>
+  <!-- Form Elements -->
+  <input type="text" name="username" placeholder="Enter username" />
+  <input type="email" name="email" placeholder="Enter email" />
+  <textarea name="comments" placeholder="Leave a comment"></textarea>
+  <select name="options">
+    <option value="">Select an option</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+  </select>
+
+  <!-- Sections to scroll to -->
+  <div id="top">Top of the page</div>
+  <div style="margin-top: 1500px;" id="bottom">Bottom of the page</div>
+
+  <script>
+    // Change URL visibly for push/replace state
+    document.getElementById('push-state-btn').addEventListener('click', () => {
+      const newUrl = window.location.pathname + '?state=push-' + Date.now();
+      window.history.pushState({}, '', newUrl);
+    });
+
+    document.getElementById('replace-state-btn').addEventListener('click', () => {
+      const newUrl = window.location.pathname + '?state=replace-' + Date.now();
+      window.history.replaceState({}, '', newUrl);
+    });
+  </script>
+
+  <!-- Initialize tracking SDK -->
+  <script type="module">
+    import { initInspector } from './sdk/dist/index.js';
+
+    initInspector({
+      userId: 'user123',
+      sessionId: 'session456',
+      serverUrl: 'ws://localhost:3000',
+      capture: [
+        'click',
+        'navigation',
+        'scroll',
+        'input',
+        'resize',
+        'keydown',
+        'visibilitychange',
+        // 'mousemove'
+      ]
+    });
+  </script>
+</body>
 </html>
