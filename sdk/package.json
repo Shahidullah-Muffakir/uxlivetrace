@@ -1,6 +1,6 @@
 {
   "name": "ux-events-inspector",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SDK to track UX/browser events like clicks, navigation, input, etc.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

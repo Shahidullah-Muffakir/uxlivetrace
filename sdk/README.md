@@ -41,7 +41,7 @@ initInspector({
 * ✅ Capture real-time user events (clicks, navigation, etc.)
 * ✅ Stream those events to a backend via WebSocket
 * ✅ Enable live debugging and insight into real user behavior
-* 🚧 Visual session replay (https://github.com/Shahidullah-Muffakir/uxlivetrace/blob/main/dashboard.html)
+* 🚧 Visual session replay
 * 🚧 NPM package + CDN support (npm package published!)
 
 ---
@@ -64,9 +64,8 @@ initInspector({
 
 ## 📦 Tech Stack
 
-* SDK: TypeScript + ESBuild
-* Server: Node.js + WebSocket (ws)
-* Dev Tools: tsx, nodemon
+* SDK: TypeScript +WebScoket
+* A Simple Server: Node.js + WebSocket (ws)
 
 ---
 
@@ -79,43 +78,42 @@ initInspector({
 * [x] Published SDK as npm package (`ux-events-inspector`)
 
 
-## 🛠️ Running Locally
+## 🛠️ Running
+
 
 ### 1. Start the WebSocket Server
 
-```
-npm run dev
-```
+First, start your WebSocket server to receive socket events:
 
-This runs `server.ts` using `tsx` and restarts on changes using `nodemon`.
+### 2. Use the SDK Package in Your Project
 
-### 2. Watch and Build the SDK
+Install the published SDK package 
 
 ```
-npm run watch:sdk
+npm install ux-events-inspector
 ```
 
-This uses `esbuild` to bundle your SDK and watches for changes.
+### 3. Import and Initialize the SDK
 
-### 3. Embed SDK in a Web Page
-
-If you want to test the local SDK build without npm install, use:
+In your web app, import the SDK from the npm package and initialize it using your WebSocket server URL:
 
 ```
+import { initInspector } from 'ux-events-inspector';
 
-  import { initInspector } from './sdk/dist/index.js'
-
-  initInspector({
-    serverUrl: 'ws://localhost:3000',
-    userId: 'test-user',
-    capture: ['click']
-  })
-
+initInspector({
+  serverUrl: 'ws://localhost:3000',  // Use your WebSocket server URL here
+  userId: 'your-user-id',
+  capture: ['click, navigation'] // add all the events you want to track
+});
 ```
 
-Use `npx http-server` or any static file server to serve this HTML.
+### 4. Dashboard for visual session replay
 
----
+Your web page that includes the SDK will connect to the WebSocket server and stream real-time UX events.
+
+Now, your dashboard or any viewer UI should subscribe to the **same WebSocket server URL** to receive the user interaction events live. This setup enables the dashboard to listen for and display incoming events from users as they happen
+A simple dashboard example:https://github.com/Shahidullah-Muffakir/uxlivetrace/blob/main/dashboard.html
+
 
 ## 🔍 Example Server Output
 
