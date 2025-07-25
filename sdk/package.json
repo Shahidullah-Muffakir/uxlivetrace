@@ -1,14 +1,31 @@
 {
   "name": "ux-events-inspector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SDK to track UX/browser events like clicks, navigation, input, etc.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["ux", "sdk", "events", "analytics", "browser"],
-  "author": "Your Name",
-  "license": "MIT"
+  "keywords": [
+    "ux",
+    "sdk",
+    "events",
+    "analytics",
+    "browser"
+  ],
+  "author": "Shahidullah Muffakir",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shahidullah-Muffakir/uxlivetrace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shahidullah-Muffakir/uxlivetrace/issues"
+  },
+  "homepage": "https://github.com/Shahidullah-Muffakir/uxlivetrace#readme"
 }
