@@ -84,6 +84,7 @@ initInspector({
 ### 1. Start the WebSocket Server
 
 First, start your WebSocket server to receive socket events:
+A simple example server: https://github.com/Shahidullah-Muffakir/uxlivetrace/blob/main/server.ts
 
 ### 2. Use the SDK Package in Your Project
 
@@ -148,4 +149,3 @@ MIT — use it freely, improve it, fork it, share it.
 ## 🗣️ Elevator Pitch
 
 > A real-time, open-source UX inspector for devs. Capture user clicks, stream via WebSocket, and see what your users are doing — live. 
-```
